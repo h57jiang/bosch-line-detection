@@ -7,5 +7,9 @@
         <h1>Welcome to Bosch line failure detection</h1>
         <p>Do you want to <a href = "{{ url_for('server.upload') }}">
             <b>upload a file?</b></a></p>
+        <p>Do you want to <a href = "{{ url_for('server.train') }}">
+                <b>train a model?</b></a></p>
+        <p>Do you want to <a href = "{{ url_for('server.predict') }}">
+                <b>predict using the model?</b></a></p>
     </body>
 </html>

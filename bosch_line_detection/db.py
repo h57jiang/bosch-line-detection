@@ -69,9 +69,20 @@ def insert_new_file(file_name):
     """insert information of a new file to db"""
     db = get_db()
     db.execute(
-        'INSERT INTO files (name, updated_on)'
+        'INSERT INTO files (name, uploaded_on)'
         ' VALUES (?, ?)',
         (file_name, datetime.datetime.now())
+    )
+    db.commit()
+
+
+def update_file(file_name, file_type):
+    """update db to indicate if a file is used by training or prediction"""
+    db = get_db()
+    db.execute(
+        'UPDATE files SET type = ?, is_used = true'
+        ' WHERE name = ?',
+        (file_type, file_name)
     )
     db.commit()
 
