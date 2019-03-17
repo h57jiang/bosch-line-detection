@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <title>Upload a file for training or prediction</title>
+    </head>
+    <h1>Please upload a file for training or prediction</h1>
+    <body>
+        {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <ul>
+                        {% for message in messages %}
+                        <li>{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+        <h1></h1>
+        <form method = "POST" enctype = "multipart/form-data">
+            <input type = "file" name = "file" />
+            <input type = "submit" value="Upload"/>
+        </form>
+    </body>
+</html>

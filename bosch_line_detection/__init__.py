@@ -1,7 +1,6 @@
 from flask import Flask
 import os
-
-from .views import detection
+from os.path import join, dirname, realpath
 
 
 def create_app(test_config=None):
@@ -20,8 +19,10 @@ def create_app(test_config=None):
         app.config.from_mapping(test_config)
 
     # ensure the instance folder exists
+    upload_folder = join(dirname(realpath(__file__)), 'static/uploads/')
     try:
         os.makedirs(app.instance_path)
+        os.makedirs(upload_folder)
     except OSError:
         pass
 
@@ -30,8 +31,16 @@ def create_app(test_config=None):
     def hello():
         return 'Hello, World!'
 
+    # configure upload_folder to save all uploaded files
+    app.config['UPLOAD_FOLDER'] = upload_folder       # todo: make this configurable
+
     # register the database commands
     from . import db
     db.init_app(app)
+
+    # apply the blueprints to the app
+    from . import server
+    app.register_blueprint(server.bp)
+    app.add_url_rule('/', endpoint='index')
 
     return app

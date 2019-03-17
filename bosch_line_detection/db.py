@@ -3,6 +3,7 @@ import sqlite3
 import click
 from flask import current_app, g
 from flask.cli import with_appcontext
+import datetime
 
 
 def get_db():
@@ -53,3 +54,24 @@ def init_app(app):
     """
     app.teardown_appcontext(close_db)
     app.cli.add_command(init_db_command)
+
+
+def file_already_uploaded(file_name):
+    """Determine if a file has already been uploaded"""
+    db = get_db()
+    result = db.execute(
+        'SELECT 1 FROM files WHERE name = ? LIMIT 1', (file_name,)
+    ).fetchall()
+    return len(result) > 0
+
+
+def insert_new_file(file_name):
+    """insert information of a new file to db"""
+    db = get_db()
+    db.execute(
+        'INSERT INTO files (name, updated_on)'
+        ' VALUES (?, ?)',
+        (file_name, datetime.datetime.now())
+    )
+    db.commit()
+
