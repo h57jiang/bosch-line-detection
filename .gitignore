@@ -1,0 +1,17 @@
+.DS_Store
+*.pyc
+*.pyo
+*.whoosh
+*.db
+env
+dist
+_mailinglist/*
+*.egg-info
+.idea/
+__pycache__/
+instance/
+.pytest_cache/
+.coverage
+htmlcov/
+dist/
+build/

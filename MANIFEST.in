@@ -1,0 +1,4 @@
+include bosch_line_detection/schema.sql
+graft bosch_line_detection/static
+graft bosch_line_detection/templates
+global-exclude *.pyc
