@@ -1,4 +1,3 @@
-
 import io
 from line_detector.db import get_db
 
@@ -21,6 +20,16 @@ def test_upload(client, app):
         db = get_db()
         post = db.execute("SELECT * FROM files WHERE name = 'test1.csv'").fetchone()
         assert post['name'] == 'test1.csv'
+
+    file_zip = dict(
+        file=(io.BytesIO(b'h1,h2,h3\n1,2,3'), "test1.csv.zip"),
+    )
+    client.post('/upload', content_type='multipart/form-data', data=file_zip, follow_redirects=True)
+
+    with app.app_context():
+        db = get_db()
+        post = db.execute("SELECT * FROM files WHERE name = 'test1.csv.zip'").fetchone()
+        assert post['name'] == 'test1.csv.zip'
 
     file_duplicate = dict(
         file=(io.BytesIO(b'h1,h2,h3\n1,2,3'), "test1.csv"),
@@ -51,16 +60,16 @@ def test_train(client):
     assert client.get('/train/test1.csv').status_code == 200
 
     file2 = dict(
-        file=(io.BytesIO(b'h1,h2,h3\n1,2,3'), "test2.csv"),
+        file=(io.BytesIO(b'h1,h2,h3\nid1,2,3'), "test20.csv"),
     )
     client.post('/upload', content_type='multipart/form-data', data=file2)
 
     response = client.post(
         '/train',
-        data={'training_file': 'test2.csv'},
+        data={'training_file': 'test20.csv'},
         follow_redirects=True
     )
-    assert b"Training using test2.csv is done" in response.data
+    assert b"Training using test20.csv is done" in response.data
 
     response = client.post(
         '/train',
@@ -68,6 +77,27 @@ def test_train(client):
         follow_redirects=True
     )
     assert b"Cannot find the file test4.csv, please upload first" in response.data
+
+    # this is not the right way to create a zip file, the purpose is just to test the logic
+    file11 = dict(
+        file=(io.BytesIO(b'h1,h2,h3\n1,2,3'), "test11.csv.zip"),
+    )
+    client.post('/upload', content_type='multipart/form-data', data=file11)
+
+    assert client.get('/train/test11.csv.zip').status_code == 200
+
+    # this is not the right way to create a zip file, the purpose is just to test the logic
+    file21 = dict(
+        file=(io.BytesIO(b'h1,h2,h3\nid1,2,3'), "test201.csv.zip"),
+    )
+    client.post('/upload', content_type='multipart/form-data', data=file21)
+
+    response = client.post(
+        '/train',
+        data={'training_file': 'test201.csv.zip'},
+        follow_redirects=True
+    )
+    assert b"File is not a zip file" in response.data
 
 
 def test_predict(client):
@@ -104,3 +134,23 @@ def test_predict(client):
     response = client.get('/predict/test5.csv')
     assert b'id1,' in response.data
 
+    # this is not the right way to create a zip file, the purpose is just to test the logic
+    file11 = dict(
+        file=(io.BytesIO(b'h1,h2,h3\n1,2,3'), "test11.csv.zip"),
+    )
+    client.post('/upload', content_type='multipart/form-data', data=file11)
+
+    assert client.get('/predict/test11.csv.zip').status_code == 200
+
+    # this is not the right way to create a zip file, the purpose is just to test the logic
+    file21 = dict(
+        file=(io.BytesIO(b'h1,h2,h3\nid1,2,3'), "test201.csv.zip"),
+    )
+    client.post('/upload', content_type='multipart/form-data', data=file21)
+
+    response = client.post(
+        '/predict',
+        data={'prediction_file': 'test201.csv.zip'},
+        follow_redirects=True
+    )
+    assert b"File is not a zip file" in response.data

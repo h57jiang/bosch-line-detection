@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 set -e
 
+python3 setup.py bdist_wheel
+
 echo "create a project folder"
 mkdir bosch-line-detection
-cp line_detector-1.0.0-py3-none-any.whl bosch-line-detection/
+cp dist/line_detector-1.0.0-py3-none-any.whl bosch-line-detection/
 cd bosch-line-detection
 
 echo "create a virtual environment"

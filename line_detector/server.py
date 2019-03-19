@@ -6,8 +6,12 @@ from flask import current_app as app
 import os
 from line_detector import db, model
 
+
+# todo: add logs for debug and information
+
+
 bp = Blueprint("server", __name__)
-allowed_extensions = {'csv'}  # todo: make this parameter configurable
+allowed_extensions = {'csv', 'zip'}  # todo: make this parameter configurable
 
 
 @bp.route('/')
@@ -86,5 +90,3 @@ def predict():
         flash(_process_file(file, 'predict'))
         return redirect(request.url)
     return render_template('server/predict.html')
-
-
