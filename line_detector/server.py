@@ -4,7 +4,7 @@ from flask import (
 from werkzeug.utils import secure_filename
 from flask import current_app as app
 import os
-from bosch_line_detection import db, model
+from line_detector import db, model
 
 bp = Blueprint("server", __name__)
 allowed_extensions = {'csv'}  # todo: make this parameter configurable

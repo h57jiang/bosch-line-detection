@@ -6,7 +6,7 @@ with open('requirements.txt') as fp:
 
 
 setup(
-    name='bosch-line-detection',
+    name='line-detector',
     version='1.0.0',
     description='web application for bosch line detection',
     author='Hai (Wisdom) Jiang',
