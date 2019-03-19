@@ -5,12 +5,7 @@ bosch-line-detection packages a machine learning model that is used to detect au
 This web application enables users to upload a file, use the uploaded file to do the training and prediction. 
 
 ## Deploy the application
-In the folder of bosch-line-detection, you may run the following script to build a file, e.g., line_detector-1.0.0-py3-none-any.whl
-
-```bash
-python3 setup.py bdist_wheel
-``` 
-You may copy the `.whl` file and `deploy.sh` to the target folder and target machine. Then deploy to `waitress-serve` by:
+To deploy the application to a waitress-server, enter the project folder, and run:
 ```bash
 sh deploy.sh
 ``` 

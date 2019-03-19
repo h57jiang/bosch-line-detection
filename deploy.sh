@@ -4,6 +4,7 @@ set -e
 python3 setup.py bdist_wheel
 
 echo "create a project folder"
+rm -rf bosch-line-detection
 mkdir bosch-line-detection
 cp dist/line_detector-1.0.0-py3-none-any.whl bosch-line-detection/
 cd bosch-line-detection
